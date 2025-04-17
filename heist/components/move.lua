@@ -1,9 +1,12 @@
 ---@class MoveableComponent : Component
+---@field mask integer
 local Moveable = prism.Component:extend("MoveableComponent")
 Moveable.name = "Moveable"
-Moveable.actions = {
-  prism.actions.Move,
-  prism.actions.Wait
-}
+
+function Moveable:__new(movetypes)
+  if movetypes then
+    self.mask = prism.Collision.createBitmaskFromMovetypes(movetypes)
+  end
+end
 
 return Moveable

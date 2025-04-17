@@ -13,11 +13,6 @@ function SensesSystem:onTurn(level, actor)
    self:triggerRebuild(level, actor)
 end
 
-function SensesSystem:onTurnEnd(level, actor)
-   if actor:hasComponent(prism.components.PlayerController) then return end
-   self:triggerRebuild(level, actor)
-end
-
 function SensesSystem:postInitialize(level)
    for actor, senses in level:eachActor(prism.components.Senses) do
       self:triggerRebuild(level, actor)
@@ -34,7 +29,6 @@ function SensesSystem:onYield(level, event)
    end
 end
 
----@param level Level
 function SensesSystem:triggerRebuild(level, actor)
    local sensesComponent = actor:getComponent(prism.components.Senses)
    if not sensesComponent then return end

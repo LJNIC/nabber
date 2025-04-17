@@ -8,7 +8,7 @@ Grapple.name = "move"
 Grapple.targets = { GrappleTarget }
 
 ---@param level Level
-function Grapple:canPerform(level)
+function Grapple:_canPerform(level)
   ---@type Vector2
   local direction = self:getTarget(1)
   ---@type Cell
@@ -26,7 +26,7 @@ function Grapple:canPerform(level)
 end
 
 ---@param level Level
-function Grapple:perform(level)
+function Grapple:_perform(level)
   ---@type Vector2
   local direction = self:getTarget(1)
   for i = 1, 5 do

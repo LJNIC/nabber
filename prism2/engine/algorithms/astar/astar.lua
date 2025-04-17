@@ -50,7 +50,7 @@ local function astarSearch(start, goal, passableCallback, costCallback, minDista
    while not frontier:isEmpty() do
       local current = frontier:pop()
       --- @cast current Vector2
-      if current:getRange("manhattan", goal) <= minDistance then
+      if current:getRange(prism._defaultDistance, goal) <= minDistance then
          final = current
          pathFound = true
          break

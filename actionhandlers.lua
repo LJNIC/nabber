@@ -1,7 +1,7 @@
 local palette = require "palette"
 local handlers = {}
 
-local exclamation = prism.components.Drawable(34, palette[2])
+local exclamation = prism.components.Drawable(34, palette[2], palette[3])
 
 ---@param display Display
 ---@param message ActionMessage

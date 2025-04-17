@@ -6,7 +6,7 @@
 --- @field private position Vector2 An actor's position in the game world.
 --- @field name string The string name of the actor, used for display to the user.
 --- @field char string The character to draw for this actor.
---- @field components table<Component> A table containing all of the actor's component instances. Generated at runtime.
+--- @field components Component[] A table containing all of the actor's component instances. Generated at runtime.
 --- @field componentCache table This is a cache for component queries, reducing most queries to a hashmap lookup.
 --- @overload fun(): Actor
 --- @type Actor
@@ -36,7 +36,7 @@ end
 --
 
 --- Creates the components for the actor. Override this.
---- @return table<Component>
+--- @return Component[]
 function Actor:initialize()
    return {}
 end
@@ -92,11 +92,9 @@ function Actor:__removeComponent(component)
 end
 
 --- Returns a bool indicating whether the actor has a component of the given type.
---- @generic T
---- @param prototype T The prototype of the component to check for.
+--- @param prototype Component The prototype of the component to check for.
 --- @return boolean hasComponent
 function Actor:hasComponent(prototype)
-   ---@cast prototype Component
    assert(prototype:is(prism.Component), "Expected argument type to be inherited from Component!")
 
    return self.componentCache[prototype] ~= nil
@@ -108,54 +106,30 @@ end
 --- @return T?
 function Actor:getComponent(prototype) return self.componentCache[prototype] end
 
+
+--- Expects a component, returning it or erroring on nil.
+--- @generic T
+--- @param prototype T The type of the component to return.
+--- @return T
+function Actor:expectComponent(prototype) 
+   return self.componentCache[prototype] or error("Expected component " .. prototype.className .. "!")
+end
 --
 --- Actions
 --
 
---- @generic T
---- @param prototype T The type of the component to return.
---- @return T?
-function Actor:getAction(prototype)
-   ---@cast prototype Actor
-   assert(prototype:is(prism.Action), "Expected argument prototype to be of type Action!")
-
-   for _, component in pairs(self.components) do
-      if component.actions then
-         for _, action in pairs(component.actions) do
-            if action == prototype then return action end
-         end
-      end
-   end
-end
-
---- Get a list of actions from the actor and all of its components.
---- @return table<Action> totalActions Returns a table of all actions.
+--- Get a list of actions that the actor can perform.
+--- @return Action[] totalActions Returns a table of all actions.
 function Actor:getActions()
    local totalActions = {}
 
-   for k, component in pairs(self.components) do
-      if component.actions then
-         for k, action in pairs(component.actions) do
-            table.insert(totalActions, action)
-         end
+   for _, action in pairs(prism.actions) do
+      if action:hasRequisiteComponents(self) then
+         table.insert(totalActions, action)
       end
    end
 
    return totalActions
-end
-
-function Actor:hasAction(action)
-   for _, component in pairs(self.components) do
-      if component.actions then
-         for _, oaction in pairs(component.actions) do
-            if action == oaction then
-               return true
-            end
-         end
-      end
-   end
-
-   return false
 end
 
 --

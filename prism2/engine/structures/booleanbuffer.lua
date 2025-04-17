@@ -46,7 +46,6 @@ end
 --- @param y integer The y-coordinate (1-based).
 --- @return boolean value The value at the given coordinates.
 function BooleanBuffer:get(x, y)
-   if x <= 0 or y <= 0 then return false end
    return self.buffer[self:getIndex(x, y)]
 end
 

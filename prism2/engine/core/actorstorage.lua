@@ -80,7 +80,7 @@ end
 --- Returns an iterator over the actors in the storage. If a component is specified, only actors with that
 --- component will be returned.
 --- @param ... Component? The components to filter by.
---- @return fun(): Actor iter An iterator over the actors in the storage.
+--- @return function iter An iterator over the actors in the storage.
 function ActorStorage:eachActor(...)
    local n = 1
    local comp = { ... }
@@ -135,9 +135,10 @@ end
 
 --- Returns a table of actors in the storage at the given position.
 --- TODO: Return an ActorStorage object instead of a table.
+---
 --- @param x number The x-coordinate to check.
 --- @param y number The y-coordinate to check.
---- @return table<Actor> actors A table of actors at the given position.
+--- @return Actor[] actors A table of actors at the given position.
 function ActorStorage:getActorsAt(x, y)
    local actorsAtPosition = {}
    for actor, _ in pairs(self.sparseMap:get(x, y)) do

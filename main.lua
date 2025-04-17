@@ -4,9 +4,12 @@ require "prism2.geometer"
 
 prism.loadModule("prism2/spectrum")
 prism.loadModule("prism2/geometer")
-prism.loadModule("heist")
 
 prism.neighborhood = prism.Vector2.neighborhood4
+
+prism.Collision.assignNextAvailableMovetype("walk")
+
+prism.loadModule("heist")
 
 local palette = require "palette"
 

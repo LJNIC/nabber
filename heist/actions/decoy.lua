@@ -7,16 +7,16 @@ PointTarget.typesAllowed = { Point = true }
 Decoy.targets = { PointTarget }
 
 ---@param level Level
-function Decoy:canPerform(level)
+function Decoy:_canPerform(level)
   ---@type Vector2
   local direction = self:getTarget(1)
   local target = self.owner:getPosition() + direction
 
-  return level:getCellPassable(target:decompose())
+  return level:getCellPassable(target.x, target.y, self.owner:getComponent(prism.components.Moveable).mask)
 end
 
 ---@param level Level
-function Decoy:perform(level)
+function Decoy:_perform(level)
   ---@type Vector2
   local direction = self:getTarget(1)
   local position = self.owner:getPosition() + direction

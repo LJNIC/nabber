@@ -2,9 +2,6 @@
 ---@field direction Vector2
 local DecoyController = prism.components.Controller:extend("DecoyControllerComponent")
 DecoyController.name = "DecoyController"
-DecoyController.actions = {
-  prism.actions.Wait
-}
 
 function DecoyController:__new()
   self.direction = prism.Vector2.RIGHT
@@ -21,7 +18,7 @@ function DecoyController:act(level, actor)
   end
 
   local position = actor:getPosition() + self.direction
-  if not level:getCellPassable(position:decompose()) then
+  if not level:getCellPassable(position.x, position.y, actor:getComponent(prism.components.Moveable).mask) then
     return prism.actions.Wait()
   end
 

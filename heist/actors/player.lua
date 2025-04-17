@@ -9,8 +9,8 @@ function Player:initialize()
       prism.components.Collider(),
       prism.components.PlayerController(),
       prism.components.Senses(),
-      prism.components.Sight { range = 5, fov = true },
-      prism.components.Moveable(),
+      prism.components.Sight { range = 6, fov = true },
+      prism.components.Moveable { "walk" },
       prism.components.Health(6),
       prism.components.Suspicious(),
       prism.components.Attacker()

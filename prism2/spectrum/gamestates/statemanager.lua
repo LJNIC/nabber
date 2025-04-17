@@ -1,5 +1,4 @@
 ---@class GameStateManager : Object
----@overload fun(): GameStateManager
 local StateManager = prism.Object:extend("GameStateManager")
 
 function StateManager:__new()

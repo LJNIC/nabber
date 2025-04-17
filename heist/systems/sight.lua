@@ -37,6 +37,30 @@ end
 
 ---@param level Level
 ---@param actor Actor
+---@param from Vector2
+---@param to Vector2
+function SightSystem:onMove(level, actor, from, to)
+   local sight = actor:getComponent(prism.components.Sight)
+   if not sight then return end
+
+   local direction = (to - from)
+   if direction == prism.Vector2.DOWN then
+      actor:getComponent(prism.components.Drawable):switch("down")
+      sight.direction = prism.Vector2.DOWN
+   elseif direction == prism.Vector2.LEFT then
+      actor:getComponent(prism.components.Drawable):switch("left")
+      sight.direction = prism.Vector2.LEFT
+   elseif direction == prism.Vector2.UP then
+      actor:getComponent(prism.components.Drawable):switch("up")
+      sight.direction = prism.Vector2.UP
+   elseif direction == prism.Vector2.RIGHT then
+      actor:getComponent(prism.components.Drawable):switch("right")
+      sight.direction = prism.Vector2.RIGHT
+   end
+end
+
+---@param level Level
+---@param actor Actor
 function SightSystem:updateSeenActors(level, actor)
    -- if we don't have a sight component we return
    local sensesComponent = actor:getComponent(prism.components.Senses)

@@ -57,6 +57,8 @@ function Display:draw()
    love.graphics.pop()
 end
 
+---@param primary SensesComponent[] List of primary senses.
+---@param secondary SensesComponent[] List of secondary senses.
 function Display.buildSenseInfo(primary, secondary)
    local primaryCellSet = prism.SparseGrid()
    local secondaryCellSet = prism.SparseGrid()
@@ -199,14 +201,6 @@ function Display:beforeDrawActors()
    -- override this method in your subclass!
 end
 
---- Hook for custom behavior before drawing each actor.
----@param actor Actor
----@param inPrimary boolean
----@param inSecondary boolean
-function Display:beforeDrawActor(actor, inPrimary, inSecondary)
-   -- override this method in your subclass!
-end
-
 --- Hook for custom behavior after drawing actors.
 function Display:afterDrawActors()
    -- override this method in your subclass!
@@ -240,15 +234,12 @@ function Display.drawDrawable(drawable, spriteAtlas, cellSize, x, y, color, alph
    color = color or drawable.color
    local r, g, b, a = color:decompose()
    local cSx, cSy = cellSize.x, cellSize.y
-   local br, bg, bb, ba
+
    if drawable.background then
-      br, bg, bb, ba = drawable.background:decompose()
-   else
-      br, bg, bb, ba = love.graphics.getBackgroundColor()
+      love.graphics.setColor(drawable.background:decompose())
+      love.graphics.rectangle("fill", x * cSx, y * cSy, cSx, cSy)
    end
 
-   love.graphics.setColor(br, bg, bb, ba)
-   love.graphics.rectangle("fill", x * cSx, y * cSy, cSx, cSy)
    love.graphics.setColor(r, g, b, a * alpha)
    love.graphics.draw(spriteAtlas.image, quad, x * cSx, y * cSy)
    love.graphics.setColor(1, 1, 1, 1)

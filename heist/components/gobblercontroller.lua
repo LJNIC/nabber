@@ -1,9 +1,6 @@
 ---@class GobblerControllerComponent : ControllerComponent
 local GobblerController = prism.components.Controller:extend("GobblerControllerComponent")
 GobblerController.name = "GobblerController"
-GobblerController.actions = {
-  prism.actions.Wait
-}
 
 function GobblerController:__new()
   self.first = false

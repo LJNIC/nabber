@@ -6,18 +6,20 @@ PointTarget.typesAllowed = { Point = true }
 local Move = prism.Action:extend("MoveAction")
 Move.name = "move"
 Move.targets = { PointTarget }
+Move.requiredComponents = {
+  prism.components.Moveable
+}
 
 ---@param level Level
-function Move:canPerform(level)
-  ---@type Vector2
-  local position = self:getTarget(1)
-  return level:getCellPassable(position:decompose())
+---@param position Vector2
+function Move:_canPerform(level, position)
+  local mover = self.owner:expectComponent(prism.components.Moveable)
+  return level:getCellPassable(position.x, position.y, mover.mask)
 end
 
 ---@param level Level
-function Move:perform(level)
-  ---@type Vector2
-  local position = self:getTarget(1)
+---@param position Vector2
+function Move:_perform(level, position)
   local direction = position - self.owner:getPosition()
 
   if self.owner:hasComponent(prism.components.PlayerController) then

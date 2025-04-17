@@ -5,13 +5,7 @@
 --- @field explored SparseGrid A sparse grid of cells the actor's senses have previously revealed.
 --- @field actors ActorStorage An actor storage with the actors the player is aware of.
 --- @field unknown SparseMap<Vector2> Unkown actors are things the player is aware of the location of, but not the components.
---- @field omniscient boolean
 local Senses = prism.Component:extend("Senses")
-Senses.name = "Senses"
-
-function Senses:__new(omniscient)
-   self.omniscient = omniscient or false
-end
 
 function Senses:initialize(actor)
    self.explored = prism.SparseGrid()

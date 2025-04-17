@@ -1,6 +1,9 @@
 ---@class AttackAction : Action
 local Attack = prism.Action:extend("AttackAction")
 Attack.name = "attack"
+Attack.requiredComponents = {
+  prism.components.Attacker
+}
 
 --- @class AttackTarget : Target
 local AttackTarget = prism.Target:extend("AttackTarget")
@@ -11,8 +14,12 @@ function AttackTarget:validate(owner, targetObject, targets)
    return targetObject:hasComponent(prism.components.Health)
 end
 
+function Attack:_canPerform()
+  return true
+end
+
 ---@param level Level
-function Attack:perform(level)
+function Attack:_perform(level)
   ---@type Actor
   local target = self:getTarget(1)
   local health = target:getComponent(prism.components.Health)

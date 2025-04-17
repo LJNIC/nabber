@@ -13,7 +13,6 @@ SentryBehavior.children = {
     prism.BehaviorTree.Node(function (self, level, actor, controller)
       local target = actor:getComponent(prism.components.Alarm).target
       if actor:getPosition():getRange("manhattan", target:getPosition()) == 1 then
-        print("Trying to attack")
         local attack = prism.actions.Attack(actor, { target })
         return attack:canPerform(level) and attack
       end
@@ -22,7 +21,7 @@ SentryBehavior.children = {
     -- Otherwise try to move towards them
     prism.BehaviorTree.Node(function (self, level, actor, controller)
       local target = actor:getComponent(prism.components.Alarm).target
-      local path = level:findPath(actor:getPosition(), target:getPosition(), 1)
+      local path = level:findPath(actor:getPosition(), target:getPosition(), 1, actor:getComponent(prism.components.Moveable).mask)
       if path and path:length() > 0 then
         local move = prism.actions.Move(actor, { path:pop() })
         return move:canPerform(level) and move
@@ -34,7 +33,7 @@ SentryBehavior.children = {
   prism.BehaviorTree.Node(function (self, level, actor, controller)
     local direction = controller.direction
     local destination = actor:getPosition() + prism.Vector2.neighborhood4[direction]
-    if not level:getCellPassable(destination:decompose()) then
+    if not level:getCellPassable(destination.x, destination.y, actor:getComponent(prism.components.Moveable).mask) then
       direction = direction + 1
       if direction > 4 then direction = 1 end
       destination = actor:getPosition() + prism.Vector2.neighborhood4[direction]

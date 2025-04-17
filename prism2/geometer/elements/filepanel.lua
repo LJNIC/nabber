@@ -36,7 +36,7 @@ local function File(self, scene)
          local compressed = love.data.compress("string", "lz4", json)
 
          ---@diagnostic disable-next-line
-         file:write(json)
+         file:write(compressed)
          file:close()
       else
          print("Failed to save file: " .. err)
@@ -66,21 +66,20 @@ local function File(self, scene)
 
          result = result[1] -- Assuming success contains a list of selected files
          -- Open the file in read mode and read its content
-         local file, err = io.open(result, "r") -- Open in binary mode to handle compressed data
+         local file, err = io.open(result, "rb") -- Open in binary mode to handle compressed data
          if file then
-            local json = file:read("*a") -- Read the entire file content
+            local compressed = file:read("*a") -- Read the entire file content
             file:close()
 
             -- Decompress the content
-            -- local ok, json = pcall(function()
-            --    return love.data.decompress("string", "lz4", compressed)
-            -- end)
+            local ok, json = pcall(function()
+               return love.data.decompress("string", "lz4", compressed)
+            end)
 
-            if json then
+            if ok and json then
                -- Deserialize the JSON content and apply it to the editor
                local data = prism.json.decode(json)
-               local attachable = prism.Object.deserialize(data)
-               self.props.editor:setAttachable(attachable)
+               self.props.editor:setAttachable(prism.Object.deserialize(data))
                self.props.editor.filepath = result
                print("File loaded successfully from: " .. result)
             else

@@ -21,7 +21,7 @@ function LevelState:__new(level, display, actionHandlers)
    self.display = display
    self.geometer = geometer.EditorState(self.level, self.display)
    self.time = 0
-   self.actionHandlers = actionHandlers
+   self.actionHandlers = actionHandlers or {}
 
    local callbackGenerator = function(callback)
       return function(display)
@@ -87,9 +87,7 @@ end
 function LevelState:handleActionMessage(message)
    ---@cast message ActionMessage
    local actionproto = getmetatable(message.action)
-   if not self.actionHandlers[actionproto] then return end
-
-   local seen = true
+   local seen = false
    for _, senses, _ in self.level:eachActor(prism.components.Senses, prism.components.PlayerController) do
       ---@cast senses SensesComponent
       if senses.actors:hasActor(message.action.owner) then
@@ -97,7 +95,7 @@ function LevelState:handleActionMessage(message)
          break
       end
    end
-   if seen then
+   if seen and self.actionHandlers[actionproto] then
       self.display:setOverride(self.actionHandlers[actionproto], message)
    end
    self.message = message

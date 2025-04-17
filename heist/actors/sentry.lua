@@ -9,7 +9,7 @@ function Sentry:initialize()
       prism.components.Collider(),
       prism.components.Senses(),
       prism.components.Sight { range = 2, fov = true },
-      prism.components.Moveable(),
+      prism.components.Moveable{ "walk" },
       prism.components.Alarm(),
       prism.components.SentryController(),
       prism.components.Attacker(true),

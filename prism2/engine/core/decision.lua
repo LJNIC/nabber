@@ -4,6 +4,7 @@
 --- @class Decision : Message
 --- @field actor Actor
 --- @overload fun(): Decision
+--- @type Decision
 local Decision = prism.Message:extend("Decision")
 
 function Decision:validateResponse()

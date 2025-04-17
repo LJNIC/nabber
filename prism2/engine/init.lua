@@ -5,7 +5,7 @@ prism.path = ...
 
 function prism.require(p) return require(table.concat({ prism.path, p }, ".")) end
 
-prism.json = prism.require "lib.json"
+prism.json = prism.require "lib/json"
 
 --- @type boolean
 prism._initialized = false
@@ -60,6 +60,9 @@ prism.Grid = prism.require "structures.grid"
 
 --- @module "engine.structures.booleanbuffer"
 prism.BooleanBuffer = prism.require "structures.booleanbuffer"
+
+--- @module "engine.structures.bitmaskbuffer"
+prism.BitmaskBuffer = prism.require "structures.bitmaskbuffer"
 
 --- @module "engine.structures.queue"
 prism.Queue = prism.require "structures.queue"
@@ -117,7 +120,8 @@ prism.Decision = prism.require "core.decision"
 prism.Target = prism.require "core.target"
 --- @module "engine.core.level"
 prism.Level = prism.require "core.level"
-
+--- @module "engine.core.collision"
+prism.Collision = prism.require "core.collision"
 -- Behavior Tree
 
 prism.BehaviorTree = {}
@@ -232,7 +236,13 @@ end
 
 prism.modules = {}
 function prism.loadModule(directory)
+   local items = love.filesystem.getDirectoryItems(directory)
+   assert(#items > 0, "The specified directory in loadModule does not exist!")
    table.insert(prism.modules, directory)
+
+   if love.filesystem.read(directory .. "/module.lua") then
+      require(directory .. "." .. "module")
+   end
 
    local sourceDir = love.filesystem.getSource() -- Get the source directory
    local definitions = { "---@meta " .. string.lower(directory) }
@@ -241,8 +251,10 @@ function prism.loadModule(directory)
       loadItems(directory .. "/" .. item, item, true, definitions)
    end
 
+   local lastSubdir = directory:match("([^/\\]+)$")
+
    -- Define the output file path
-   local outputFile = sourceDir .. "/definitions/" .. directory .. ".lua"
+   local outputFile = sourceDir .. "/definitions/" .. lastSubdir .. ".lua"
 
    -- Write the concatenated definitions to the file
    local file, err = io.open(outputFile, "w")

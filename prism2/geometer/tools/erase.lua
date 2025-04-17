@@ -15,7 +15,6 @@ end
 --- @param y integer The cell coordinate clicked.
 function Erase:mouseclicked(editor, attached, x, y)
    if not attached:inBounds(x, y) then return end
-   print(attached.className)
 
    self.origin = prism.Vector2(x, y)
 end
@@ -41,7 +40,6 @@ end
 --- @return number? bottomrighty
 function Erase:getCurrentRect()
    if not self.origin or not self.second then return end
-   print(self.second)
 
    local x, y = self.origin.x, self.origin.y
    local sx, sy = self.second.x, self.second.y
@@ -54,9 +52,10 @@ end
 
 --- @param display Display
 function Erase:draw(editor, display)
-   local lx, ly, rx, ry = self:getCurrentRect()
-   if not lx then return end
+   if not self.origin then return end
+
    local csx, csy = display.cellSize.x, display.cellSize.y
+   local lx, ly, rx, ry = self:getCurrentRect()
 
    -- Calculate width and height
    local w = (rx - lx + 1) * csx

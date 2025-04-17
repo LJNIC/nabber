@@ -99,11 +99,9 @@ end
 ---@param actionPrototype Action
 ---@return Actor|nil
 function PlayState:validateMove(actor, actorsAt, actionPrototype)
-  if actor:hasAction(actionPrototype) then
-    for _,actorAt in ipairs(actorsAt) do
-      if actionPrototype:validateTarget(1, actor, actorAt, {}) then
-        return actorAt
-      end
+  for _,actorAt in ipairs(actorsAt) do
+    if actionPrototype:validateTarget(1, actor, actorAt, {}) then
+      return actorAt
     end
   end
 end
@@ -114,6 +112,7 @@ end
 function PlayState:handleMove(direction, actor)
   if self.decidingDirection then
     self.decidingDirection = false
+    ---@type Action
     local action = self.actionPrototype(actor, { direction })
     self.actionPrototype = nil
     if action:canPerform(self.level) then 

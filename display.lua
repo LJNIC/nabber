@@ -11,14 +11,13 @@ end
 ---@param primaryCellSet SparseGrid
 function HeistDisplay:beforeDrawActor(actor, inPrimary, inSecondary, primaryCellSet)
    if actor:hasComponent(prism.components.Alarm) then
-      local range = actor:getComponent(prism.components.Sight).range
-      prism.Ellipse("fill", actor:getPosition(), range, range, function(x, y)
-         local isFloor = self.attachable:getCell(x, y) == prism.cells.Floor
-         local cellsSeenByActor = actor:getComponent(prism.components.Senses).cells
-         if isFloor and primaryCellSet:get(x, y) and cellsSeenByActor:get(x, y) then
+      local senses = actor:expectComponent(prism.components.Senses)
+      for x, y, cell in senses.cells:each() do
+         local isFloor = cell and cell:is(prism.cells.Floor)
+         if isFloor and primaryCellSet:get(x, y) then
             self:drawAlarm(x, y)
          end
-      end)
+      end
    end
 end
 

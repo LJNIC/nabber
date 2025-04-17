@@ -10,9 +10,6 @@ SentryController.requirements = {
   prism.components.Senses,
   prism.components.Moveable
 }
-SentryController.actions = {
-  prism.actions.Wait
-}
 
 function SentryController:__new()
   self.direction = 2

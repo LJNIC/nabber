@@ -24,9 +24,7 @@ function Component:checkRequirements(actor)
 
    for k, component in pairs(actor.components) do
       for k, req in pairs(self.requirements) do
-         if component:is(req) then 
-            table.insert(foundreqs, component) 
-         end
+         if component:is(req) then table.insert(foundreqs, component) end
       end
    end
 
