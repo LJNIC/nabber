@@ -2,18 +2,17 @@ require "debugger"
 require "prism"
 
 prism.loadModule("prism/spectrum")
-prism.loadModule("modules/Sight")
-prism.loadModule("modules/MyGame")
+prism.loadModule("modules/sight")
+prism.loadModule("modules/nabber")
+
+love.graphics.setDefaultFilter("nearest", "nearest")
 
 -- Grab our level state and sprite atlas.
 local MyGameLevelState = require "gamestates.MyGamelevelstate"
 
 -- Load a sprite atlas and configure the terminal-style display,
-local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
-local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(16, 16))
-
--- Automatically size the window to match the terminal dimensions
-display:fitWindowToTerminal()
+local spriteAtlas = spectrum.SpriteAtlas.fromGrid("display/tileset.png", 8, 8)
+local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(8, 8))
 
 -- spin up our state machine
 --- @type GameStateManager

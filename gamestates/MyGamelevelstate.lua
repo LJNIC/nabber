@@ -16,13 +16,12 @@ function MyGameLevelState:__new(display)
    -- and pass in an existing player object between levels.
    local mapbuilder = prism.MapBuilder(prism.cells.Wall)
 
-   mapbuilder:drawRectangle(0, 0, 32, 32, prism.cells.Wall)
+   mapbuilder:drawRectangle(0, 0, 16, 16, prism.cells.Wall)
    -- Fill the interior with floor tiles
-   mapbuilder:drawRectangle(1, 1, 31, 31, prism.cells.Floor)
+   mapbuilder:drawRectangle(1, 1, 15, 15, prism.cells.Floor)
    -- Add a small block of walls within the map
    mapbuilder:drawRectangle(5, 5, 7, 7, prism.cells.Wall)
    -- Add a pit area to the southeast
-   mapbuilder:drawRectangle(20, 20, 25, 25, prism.cells.Pit)
 
    -- Place the player character at a starting location
    mapbuilder:addActor(prism.actors.Player(), 12, 12)
@@ -33,7 +32,6 @@ function MyGameLevelState:__new(display)
       prism.systems.Senses(),
       prism.systems.Sight(),
    })
-
 
    -- Initialize with the created level and display, the heavy lifting is done by
    -- the parent class.
@@ -57,15 +55,14 @@ function MyGameLevelState:draw(primary, secondary)
    self.display:clear()
 
    local position = self.decision.actor:getPosition()
-   local x, y = self.display:getCenterOffset(position:decompose())
-   self.display:setCamera(x, y)
+   self.display:setCamera(10, 1)
 
    local primary, secondary = self:getSenses()
    -- Render the level using the actor’s senses
    self.display:putSenses(primary, secondary)
 
    -- custom terminal drawing goes here!
-   
+
    -- Say hello!
    self.display:putString(1, 1, "Hello prism!")
 
@@ -74,6 +71,7 @@ function MyGameLevelState:draw(primary, secondary)
    -- offset it for custom non-terminal UI elements. If you do scale the UI
    -- just remember that display:getCellUnderMouse expects the mouse in the
    -- display's local pixel coordinates
+   love.graphics.scale(2, 2)
    self.display:draw()
 
    -- custom love2d drawing goes here!
@@ -120,6 +118,11 @@ function MyGameLevelState:keypressed(key, scancode)
    if action == "wait" then
       decision:setAction(prism.actions.Wait(self.decision.actor))
    end
+end
+
+function MyGameLevelState:resume()
+   local sensesSystem = self.level:getSystem("SensesSystem")
+   if sensesSystem then sensesSystem:postInitialize(self.level) end
 end
 
 return MyGameLevelState
