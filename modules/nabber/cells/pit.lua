@@ -1,11 +1,9 @@
----@class Pit : Cell
-local Pit = prism.Cell:extend("Pit")
+prism.registerCell("Pit", function()
+   return prism.Cell.fromComponents {
+      prism.components.Drawable(1),
+      prism.components.Name("Pit"),
 
-function Pit:initialize()
-  return {
-    prism.components.Drawable(1),
-    prism.components.Collider({ allowedMovetypes = { "fly" }})
-  }
-end
-
-return Pit
+      prism.components.Opaque(),
+      prism.components.Collider({ allowedMovetypes = { "fly" } }),
+   }
+end)

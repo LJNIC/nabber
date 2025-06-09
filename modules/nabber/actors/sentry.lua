@@ -1,14 +1,14 @@
 local palette = require "display.palette"
 
-prism.registerActor("Player", function(index)
+prism.registerActor("Sentry", function()
    return prism.Actor.fromComponents {
-      prism.components.Drawable(index or 2, palette[20], palette[6], 2),
-      prism.components.Name("Player"),
-
+      prism.components.Name("Sentry"),
+      prism.components.Drawable(349, palette[27], palette[6]),
       prism.components.Collider(),
-      prism.components.PlayerController(),
       prism.components.Senses(),
       prism.components.Sight { range = 2, fov = true },
       prism.components.Mover { "walk" },
+      prism.components.Alarm(),
+      prism.components.SentryContoller(),
    }
 end)

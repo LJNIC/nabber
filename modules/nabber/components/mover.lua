@@ -1,5 +1,6 @@
 --- @class Mover : Component
 --- @field mask Bitmask
+--- @overload fun(movetypes: string[]): Mover
 local Mover = prism.Component:extend("Mover")
 Mover.name = "Mover"
 

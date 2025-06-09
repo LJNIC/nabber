@@ -1,14 +1,12 @@
 local palette = require "display.palette"
 
---- @class Wall : Cell
-local Wall = prism.Cell:extend("Wall")
+prism.registerCell("Wall", function()
+   return prism.Cell.fromComponents {
+      prism.components.Name("Wall"),
+      prism.components.Drawable(239, palette[7], palette[6]),
+      prism.components.WallAutoTile(),
 
-function Wall:initialize()
-  return {
-    prism.components.Drawable(239, palette[7], palette[6]),
-    prism.components.Collider(),
-    prism.components.Opaque()
-  }
-end
-
-return Wall
+      prism.components.Collider(),
+      prism.components.Opaque(),
+   }
+end)
